@@ -8,6 +8,7 @@ export default function SettingsView() {
   const [saving, setSaving] = useState(false);
   const [tunnelToken, setTunnelToken] = useState("");
   const [tunnelStatus, setTunnelStatus] = useState<{ status: string; lastError: string | null } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     api.getSettings().then((s) => {
@@ -83,9 +84,26 @@ export default function SettingsView() {
             {tunnelStatus.lastError && ` — ${tunnelStatus.lastError}`}
           </p>
         )}
+
+        {tunnelHostname && (
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://${tunnelHostname}/mcp`);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+            >
+              {copied ? "Copied!" : "Copy MCP URL"}
+            </button>
+            <button onClick={() => window.open("https://chatgpt.com/#settings/Connectors")}>Open ChatGPT connectors</button>
+          </div>
+        )}
+
         <p className="hint">
-          Requires `cloudflared` (brew install cloudflared) and a Named Tunnel you've already created against a
-          domain you control — see README "ChatGPT connector setup". This flow is unverified against a live
+          First time? Run <code>./scripts/setup-chatgpt-connector.sh</code> from the <code>apps/desktop</code> folder
+          — it handles the Cloudflare Tunnel setup and fills these in for you. Requires `cloudflared` (brew install
+          cloudflared) and a Named Tunnel against a domain you control. This flow is unverified against a live
           Cloudflare account/ChatGPT connector; treat it as a starting point to test, not a guarantee.
         </p>
       </section>

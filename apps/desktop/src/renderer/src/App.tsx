@@ -32,8 +32,8 @@ export default function App() {
             </button>
           ))}
         </nav>
-        <button className="chat-button" onClick={() => window.open("chatgpt://")}>
-          Open ChatGPT
+        <button className="chat-button" onClick={() => setTab("settings")}>
+          Connect to ChatGPT
         </button>
       </header>
 
