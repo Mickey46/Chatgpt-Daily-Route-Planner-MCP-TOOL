@@ -21,13 +21,14 @@ just written:
 - Local WebSocket live-update channel (UI reflects changes from any source in real time)
 - Full OAuth 2.1 + PKCE + Dynamic Client Registration flow protecting `/mcp` (tested with a real register → authorize → token → authenticated MCP call round trip)
 - Packaged `.dmg`/`.zip` via `electron-builder`, with `RouteHelper` bundled into `Resources/` and confirmed working from the packaged app
+- Ad-hoc code signing (`build/afterPack.js`) — confirmed by simulating a real browser download (adding the `com.apple.quarantine` attribute) and launching the signed app fresh; it opens without Gatekeeper's "is damaged" error. Earlier builds used `identity: null`, which skips signing entirely and does trigger that error on modern macOS after a real download — fixed after hitting it firsthand.
 
 ## What's NOT verified (needs your accounts/hardware to test)
 
 - **EventKit calendar sync**: the code path is implemented (`RouteHelper`'s `calendarCreateEvent`/etc.), but this environment has no GUI to click through the macOS "Allow calendar access" permission dialog, so it's never actually written an event to Calendar.app. Test this first after installing.
 - **Real Cloudflare Tunnel**: `cloudflared` isn't installed in this environment. `CloudflaredManager` spawns `cloudflared tunnel run --token <token>` and expects you to have already run `cloudflared tunnel login` + created a Named Tunnel against a domain you control. See setup steps below.
 - **Real ChatGPT connector registration**: the OAuth/DCR flow was tested with a synthetic client (curl), not ChatGPT's actual Developer Mode connector UI. The endpoints follow the documented spec (RFC 8414/9728/7591 + PKCE S256), but ChatGPT's real client could behave differently in edge cases.
-- **Gatekeeper on a second Mac**: the app is ad-hoc signed (no Apple Developer ID), so AirDropping it to another Mac will trigger a Gatekeeper warning — right-click → Open the first time.
+- **Full notarization**: the app is ad-hoc signed (confirmed to avoid the "damaged" error, see above) but not notarized, since that needs a paid Apple Developer ID. AirDropping/downloading to another Mac still shows one Gatekeeper "unidentified developer" prompt the first time — that one's expected and is resolved by right-click → Open (or System Settings → Privacy & Security → "Open Anyway"), unlike the "damaged" error which had no such recovery path.
 
 ## Dev setup
 
@@ -50,9 +51,18 @@ backend running on port 4173.
 npm run dist    # build + build:native + electron-builder -> release/*.dmg, *.zip
 ```
 
-Ad-hoc signed by default. To notarize (removes the Gatekeeper warning on
-other Macs), you need a paid Apple Developer ID — set `identity`, enable
-`notarize`, and provide credentials via env vars in `electron-builder.yml`.
+Ad-hoc signed by default (via `build/afterPack.js`, since electron-builder's
+own `identity` option doesn't understand codesign's ad-hoc `-` value — it
+looks it up as a keychain identity name and fails). If you install from a
+build and macOS says the app **"is damaged and can't be opened"**, that
+means it was packaged with signing skipped entirely (`identity: null` and
+no afterPack hook) — the fix is this ad-hoc-signing hook, not something end
+users should have to work around with `xattr -cr`.
+
+To notarize (removes even the "unidentified developer" prompt on other
+Macs), you need a paid Apple Developer ID — set `identity` to your Developer
+ID certificate, turn `hardenedRuntime` back on, enable `notarize`, and
+provide credentials via env vars.
 
 ## ChatGPT connector setup (one-time, per Mac that runs the tunnel)
 

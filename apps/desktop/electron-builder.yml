@@ -10,6 +10,8 @@ extraResources:
   - from: native/RouteHelper/.build/release/RouteHelper
     to: RouteHelper
 
+afterPack: build/afterPack.js
+
 mac:
   category: public.app-category.productivity
   target:
@@ -17,13 +19,21 @@ mac:
       arch: [arm64]
     - target: zip
       arch: [arm64]
-  # Ad-hoc signed by default (no Apple Developer ID required) -- good enough
-  # to run locally and AirDrop between your own Macs, but recipients will
-  # see a Gatekeeper warning and need to right-click -> Open the first time.
-  # If you have a paid Apple Developer ID, set identity + enable
-  # hardenedRuntime + notarize for a smoother install on other Macs.
+  # Ad-hoc signed (identity: "-") -- no Apple Developer ID required, and
+  # gives every binary in the bundle a valid (if untrusted) signature. This
+  # matters: `identity: null` skips signing *entirely*, and on modern macOS
+  # that makes Gatekeeper report the app as "damaged" rather than just
+  # showing the milder "unidentified developer" warning -- learned this the
+  # hard way after a real download failed. Ad-hoc signing avoids the
+  # "damaged" message; recipients still see one Gatekeeper prompt and need
+  # to right-click -> Open the first time, since this isn't notarized.
+  # hardenedRuntime is off on purpose: it's only beneficial paired with
+  # notarization, and can cause an unnotarized ad-hoc build to crash instead.
+  # If you get a paid Apple Developer ID, set identity to that team's
+  # certificate, turn hardenedRuntime back on, and enable notarize for a
+  # fully warning-free install on other Macs.
   identity: null
-  hardenedRuntime: true
+  hardenedRuntime: false
   extendInfo:
     # EventKit calendar access -- macOS 14+ uses the "full access" string,
     # older versions fall back to the classic one. Both are included for
