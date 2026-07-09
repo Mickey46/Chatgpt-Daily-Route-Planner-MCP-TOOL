@@ -1,0 +1,46 @@
+appId: com.bcbaplanner.app
+productName: BCBA Route Planner
+directories:
+  output: release
+files:
+  - dist/main/**/*
+  - dist/renderer/**/*
+  - package.json
+extraResources:
+  - from: native/RouteHelper/.build/release/RouteHelper
+    to: RouteHelper
+
+mac:
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch: [arm64]
+    - target: zip
+      arch: [arm64]
+  # Ad-hoc signed by default (no Apple Developer ID required) -- good enough
+  # to run locally and AirDrop between your own Macs, but recipients will
+  # see a Gatekeeper warning and need to right-click -> Open the first time.
+  # If you have a paid Apple Developer ID, set identity + enable
+  # hardenedRuntime + notarize for a smoother install on other Macs.
+  identity: null
+  hardenedRuntime: true
+  extendInfo:
+    # EventKit calendar access -- macOS 14+ uses the "full access" string,
+    # older versions fall back to the classic one. Both are included for
+    # compatibility; only the one the OS checks for actually shows in the
+    # permission prompt.
+    NSCalendarsFullAccessUsageDescription: >-
+      BCBA Route Planner syncs your scheduled sessions into a dedicated
+      "BCBA Schedule" calendar so they show up in Calendar.app and iCloud.
+    NSCalendarsUsageDescription: >-
+      BCBA Route Planner syncs your scheduled sessions into a dedicated
+      "BCBA Schedule" calendar so they show up in Calendar.app and iCloud.
+
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications

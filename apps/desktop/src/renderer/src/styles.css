@@ -1,0 +1,313 @@
+:root {
+  color-scheme: light dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1c1c1e;
+    color: #f5f5f7;
+  }
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.3);
+}
+
+.app-header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #0a84ff;
+  color: white;
+}
+
+.chat-button {
+  border: none;
+  background: #10a37f;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.app-main {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+.toast {
+  background: #0a84ff;
+  color: white;
+  padding: 6px 16px;
+  font-size: 13px;
+}
+
+.kanban-toolbar,
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+.kanban-column {
+  min-width: 220px;
+  max-width: 240px;
+  flex: 0 0 auto;
+  background: rgba(127, 127, 127, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 200px;
+}
+
+.kanban-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.session-card {
+  background: white;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  font-size: 13px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .session-card {
+    background: #2c2c2e;
+  }
+}
+
+.session-card-title {
+  font-weight: 600;
+}
+
+.session-card-meta,
+.session-card-time {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.small-button {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  background: transparent;
+  cursor: pointer;
+}
+
+.route-summary {
+  font-size: 11px;
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+.warning {
+  color: #ff9500;
+  font-size: 11px;
+}
+
+.kanban-add {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-block {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.timeline-time {
+  width: 60px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.timeline-sub {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.drive-segment {
+  font-size: 12px;
+  opacity: 0.7;
+  padding-left: 72px;
+}
+
+.empty-state {
+  opacity: 0.6;
+  font-size: 13px;
+}
+
+.clients-view {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+}
+
+.clients-list {
+  width: 280px;
+  flex: 0 0 auto;
+  overflow-y: auto;
+}
+
+.client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.type-checkboxes {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.client-row {
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+.client-row.selected {
+  background: rgba(10, 132, 255, 0.15);
+}
+
+.client-address {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.client-detail {
+  flex: 1;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.note {
+  padding: 8px;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.note-date {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.settings-view {
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings-view section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-view label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.hint {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  font-size: 13px;
+}
+
+input,
+select,
+textarea {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  background: transparent;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
